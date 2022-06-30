@@ -20,14 +20,13 @@ sshpass ssh-askpass zip xz-utils kpartx vim screen flex
 
 ## 2. Create TEV-Jetpack base on your device.
 
-### Create workspace
-#### Create and enter the nvidia workspace folder
+### Create and enter the nvidia workspace folder
 ```coffeescript
 $ mkdir <nvidia_folder> && cd <nvidia_folder>
 ```
 
 ### Download the TN-Jetpack using the script
-Download script from [rae.github](https://raw.githubusercontent.com/TechNexion-Vision/TEV-Jetson_Jetpack_script/master/technexion_jetpack_download_pre-release.sh)
+Download script from [raw.github](https://raw.githubusercontent.com/TechNexion-Vision/TEV-Jetson_Jetpack_script/master/technexion_jetpack_download_pre-release.sh) and run.
 ```coffeescript
 # Change the script permission
 $ sudo chmod 777 technexion_jetpack_download_pre-release.sh
@@ -58,13 +57,15 @@ $ lsusb
 Bus 001 Device 012: ID 0955:7e19 NVIDIA Corp. APX
 ```
 
-### Flash demo image
-For Xavier-NX
+### Flash demo image 
+Demo image is already in <nvidia_folder>/Linux_for_Tegra/bootloader/, named system.img.
+
+* For Xavier-NX
 ```coffeescript
 $ sudo ./flash.sh -r jetson-xavier-nx-devkit-emmc mmcblk0p1 
 ```
 
-For Nano
+* For Nano
 ```coffeescript
 $ sudo ./flash.sh -r jetson-nano-devkit-emmc mmcblk0p1 
 ```
