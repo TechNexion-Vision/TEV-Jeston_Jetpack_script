@@ -80,7 +80,8 @@ You need to **[follow the step](https://www.linuxtechi.com/ubuntu-18-04-lts-desk
 (Need to prepare **USB keyboard/ mouse**, and **DP monitor**.)
 
 And you can login GUI/ CUI with your account.
-(With TEK8-NVJETSON)
-It will flash FPGA firmware after you set system configuration.
-Reboot after finish, and this only do it once.
+> **With TEK8-NVJETSON**
+> 
+> It will flash FPGA firmware after you set system configuration.
+> Reboot after finish, and this only do it once.
 
