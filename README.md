@@ -5,15 +5,7 @@
 
 This script contains a complete system package that enables your Jeston Jetpack to directly support TechNexion embedded vision devices.
 
-## 1. Create TEV-Jetpack base on your device.
-
-### Create workspace
-#### Create and enter the nvidia workspace folder
-```coffeescript
-$ mkdir <nvidia_folder> && cd <nvidia_folder>
-```
-
-### Install required packages
+## 1. Install required packages
 ```coffeescript
 $: sudo apt-get install gawk wget git git-core diffstat unzip texinfo gcc-multilib build-essential \
 chrpath socat cpio python python3 python3-pip python3-pexpect \
@@ -26,14 +18,22 @@ groff curl lzop asciidoc u-boot-tools libreoffice-writer \
 sshpass ssh-askpass zip xz-utils kpartx vim screen flex
 ```
 
+## 2. Create TEV-Jetpack base on your device.
+
+### Create workspace
+#### Create and enter the nvidia workspace folder
+```coffeescript
+$ mkdir <nvidia_folder> && cd <nvidia_folder>
+```
+
 ### Download the TN-Jetpack using the script
-Download script from [ftp server](https://ftp.technexion.com/development_resources/nvidia/download_script/)
+Download script from [rae.github](https://raw.githubusercontent.com/TechNexion-Vision/TEV-Jetson_Jetpack_script/master/technexion_jetpack_download_pre-release.sh)
 ```coffeescript
 # Change the script permission
-$ sudo chmod 777 technexion_jetpack_download_<tag>_<time>.sh
+$ sudo chmod 777 technexion_jetpack_download_pre-release.sh
 
 # Run the script to download Jetpack and Technexion sources
-$ ./technexion_jetpack_download_<tag>_<time>.sh
+$ ./technexion_jetpack_download_pre-release.sh
 
 # chosing your SOC and board.
 # 1. TEK3-NVJETSON with Jetson Xavier Nx
@@ -41,6 +41,11 @@ $ ./technexion_jetpack_download_<tag>_<time>.sh
 # 3. TEK8-NVJETSON with Jetson Xavier Nx
 ```
 ## 2. Flash demo image from TEV-Jetpack
+
+### Go to the main folder
+```coffeescript
+$ cd <nvidia_folder>/Linux_for_Tegra/
+```
 
 ### Enter Recovery mode
 1. **Connect** to computer via **M-USB1**.
@@ -65,8 +70,8 @@ $ sudo ./flash.sh -r jetson-nano-devkit-emmc mmcblk0p1
 ```
 <br />
 
-## Login to device CUI/ GUI
-When first booting, you will see this on CUI:
+## 3. Login to device CUI/ GUI(console/ display)
+After flash, you will see this on CUI:
 ```
 [   31.893157] Please complete system configuration setup on desktop to proceed...
 ```
