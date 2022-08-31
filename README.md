@@ -37,7 +37,7 @@ $ ./technexion_jetpack_download_pre-release.sh
 # chosing your SOC and board.
 # 1. TEK3-NVJETSON with Jetson Xavier Nx
 # 2. TEK3-NVJETSON with Jetson Nano
-# 3. TEK8-NVJETSON with Jetson Xavier Nx
+# 3. TEK8-NX210V with Jetson Xavier Nx
 ```
 ## 2. Flash demo image from TEV-Jetpack
 
@@ -80,7 +80,7 @@ You need to **[follow the step](https://www.linuxtechi.com/ubuntu-18-04-lts-desk
 (Need to prepare **USB keyboard/ mouse**, and **DP monitor**.)
 
 And you can login GUI/ CUI with your account.
-> **With TEK8-NVJETSON**
+> **With TEK8-NX210V**
 > 
 > It will flash FPGA firmware after you set system configuration.
 > Reboot after finish, and this only do it once.
