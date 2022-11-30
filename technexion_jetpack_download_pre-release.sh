@@ -258,6 +258,8 @@ create_demo_image (){
 	else
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1.dtb Linux_for_Tegra/rootfs/boot/
+		# tweak: dp pinmux will use origin dtb, we must update it.
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-all-p3509-0000.dtb Linux_for_Tegra/kernel/dtb/
 	fi
 	# copy u-boot.bin (tweak for TEK3-NVJETSON with Nano)
 	if [[ $OPTION -eq 2 ]];then
