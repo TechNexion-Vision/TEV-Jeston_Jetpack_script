@@ -162,6 +162,24 @@ sync_tn_source_code() {
 		fi
 		cd ${CUR_DIR}
 	fi
+
+	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+		echo -ne "# cboot\n"
+		cd Linux_for_Tegra/sources/
+		if [[ $USING_SSH -eq 0 ]];then
+			git clone https://github.com/TechNexion-Vision/TEV_JetsonXavierNX_Cboot.git cboot
+		else
+			git clone tn-github git@github.com:TechNexion-Vision/TEV_JetsonXavierNX_Cboot.git cboot
+		fi
+		cd cboot
+		git pull tn-github
+		git checkout ${BRANCH}
+		if [[ $USING_TAG -eq 1 ]];then
+			git reset --hard ${TAG}
+		fi
+		cd ${CUR_DIR}
+	fi
+
 	echo -ne "done\n"
 }
 
@@ -224,6 +242,25 @@ create_u-boot_compile_script () {
 	echo -ne "done\n"
 }
 
+create_cboot_compile_script () {
+	echo -ne "\n### Download cboot compile script\n"
+	cd Linux_for_Tegra/sources/cboot
+	echo -e "#!/bin/bash" > environment_arm64_gcc7.sh
+	echo -e "export GCC_DIR=${GCC_TOOL_CHAIN}" >> environment_arm64_gcc7.sh
+	echo -e "export ARCH=arm64" >> environment_arm64_gcc7.sh
+	echo -e "export CROSS_COMPILE=\${GCC_DIR}/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-" >> environment_arm64_gcc7.sh
+	echo -e "export CROSS_COMPILE_AARCH64_PATH=\${GCC_DIR}/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu/" >> environment_arm64_gcc7.sh
+	chmod 777 environment_arm64_gcc7.sh
+
+	echo -e "#!/bin/bash\n" > compile_cboot.sh
+	echo -e "source environment_arm64_gcc7.sh" >> compile_cboot.sh
+	echo -e "export TEGRA_TOP=\$PWD" >> compile_cboot.sh
+	echo -e "make -C ./bootloader/partner/t18x/cboot PROJECT=t194 TOOLCHAIN_PREFIX="\${CROSS_COMPILE}"  DEBUG=2 BUILDROOT="\${PWD}"/out NV_TARGET_BOARD=t194ref NV_BUILD_SYSTEM_TYPE=l4t NOECHO=@\n" >> compile_cboot.sh
+	chmod 777 compile_cboot.sh
+	cd ${CUR_DIR}
+	echo -ne "done\n"
+}
+
 compile_kernel_for_24_cam (){
 	echo -ne "\n### compile tweak kernel for 24-cam\n"
 	cd Linux_for_Tegra/sources/kernel/technexion/
@@ -260,6 +297,15 @@ compile_u-boot (){
 	echo -ne "done\n"
 }
 
+compile_cboot (){
+	echo -ne "\n### compile cboot\n"
+	cd Linux_for_Tegra/sources/cboot
+	./compile_cboot.sh
+
+	cd ${CUR_DIR}
+	echo -ne "done\n"
+}
+
 create_demo_image (){
 	echo -ne "\n### create demo_image\n"
 	# copy kernel image
@@ -285,6 +331,10 @@ create_demo_image (){
 	# copy u-boot.bin (tweak for TEK3-NVJETSON with Nano)
 	if [[ $OPTION -eq 2 ]];then
 		sudo cp -rp Linux_for_Tegra/sources/u-boot/u-boot.bin Linux_for_Tegra/bootloader/t210ref/p3450-0000/
+	fi
+	# copy lk.bin of cboot
+	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+		sudo cp -rp Linux_for_Tegra/sources/cboot/out/build-t194/lk.bin Linux_for_Tegra/bootloader/cboot_t194.bin
 	fi
 	# copy pinmux file (Xavier-NX only)
 	if [[ $OPTION -eq 1 ]];then
@@ -420,6 +470,11 @@ do_job () {
 	if [[ $OPTION -eq 2 ]];then
 		create_u-boot_compile_script
 		compile_u-boot
+	fi
+
+	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+		create_cboot_compile_script
+		compile_cboot
 	fi
 
 	create_demo_image
