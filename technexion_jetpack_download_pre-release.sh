@@ -231,7 +231,6 @@ compile_kernel_for_24_cam (){
 	cd ${CUR_DIR}
 
 	cd Linux_for_Tegra/sources/kernel/kernel-4.9/
-	source environment_arm64_gcc7.sh
 	./compile_kernel.sh
 	# backup tweak kernel
 	mv arch/arm64/boot/Image arch/arm64/boot/Image_24-cam
@@ -246,7 +245,6 @@ compile_kernel_for_24_cam (){
 compile_kernel (){
 	echo -ne "\n### compile kernel\n"
 	cd Linux_for_Tegra/sources/kernel/kernel-4.9/
-	source environment_arm64_gcc7.sh
 	./compile_kernel.sh
 
 	cd ${CUR_DIR}
@@ -256,7 +254,6 @@ compile_kernel (){
 compile_u-boot (){
 	echo -ne "\n### compile u-boot\n"
 	cd Linux_for_Tegra/sources/u-boot
-	source environment_arm64_gcc7.sh
 	./compile_u-boot.sh
 
 	cd ${CUR_DIR}
