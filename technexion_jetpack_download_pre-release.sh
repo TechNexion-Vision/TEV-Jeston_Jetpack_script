@@ -319,9 +319,11 @@ create_demo_image (){
 	# copy device-tree
 	if [[ $OPTION -eq 2 ]];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1-no-vizionlink.dtb Linux_for_Tegra/rootfs/boot/ # For DVT
 	else
 		if [[ $OPTION -eq 1 ]];then
 			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
+			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1-no-vizionlink.dtb Linux_for_Tegra/rootfs/boot/ # For DVT
 		else
 			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb Linux_for_Tegra/rootfs/boot/
 		fi
