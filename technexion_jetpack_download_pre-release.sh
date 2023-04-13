@@ -273,9 +273,6 @@ compile_kernel_for_24_cam (){
 	mv arch/arm64/boot/Image arch/arm64/boot/Image_24-cam
 	cd ${CUR_DIR}
 
-	cd Linux_for_Tegra/sources/kernel/technexion/
-	git checkout $BRANCH
-	cd ${CUR_DIR}
 	echo -ne "done\n"
 }
 
@@ -309,11 +306,12 @@ compile_cboot (){
 create_demo_image (){
 	echo -ne "\n### create demo_image\n"
 	# copy kernel image
-	sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image Linux_for_Tegra/kernel/
-	sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image Linux_for_Tegra/rootfs/boot/
 	if [[ $OPTION -eq 3 ]];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image_24-cam Linux_for_Tegra/kernel/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image_24-cam Linux_for_Tegra/rootfs/boot/
+	else
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image Linux_for_Tegra/kernel/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image Linux_for_Tegra/rootfs/boot/
 	fi
 	sudo rm -rf Linux_for_Tegra/kernel/Image.gz
 	# copy kernel modules
@@ -322,9 +320,11 @@ create_demo_image (){
 	if [[ $OPTION -eq 2 ]];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
 	else
-		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
-		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1.dtb Linux_for_Tegra/rootfs/boot/
-		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb Linux_for_Tegra/rootfs/boot/
+		if [[ $OPTION -eq 1 ]];then
+			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
+		else
+			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb Linux_for_Tegra/rootfs/boot/
+		fi
 		# tweak: dp pinmux will use origin dtb, we must update it.
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-all-p3509-0000.dtb Linux_for_Tegra/kernel/dtb/
 	fi
@@ -384,12 +384,6 @@ create_demo_image (){
 	else
 		sudo sed -i 's|LINUX /boot/Image|LINUX /boot/Image_24-cam|' extlinux.conf
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb' extlinux.conf
-		sudo sed -i '13i \ \ \ \ \ \ APPEND ${cbootargs}' extlinux.conf
-		sudo sed -i '13i \ \ \ \ \ \ FDT /boot/tegra194-p3668-tek8-nx210v-a1.dtb' extlinux.conf
-		sudo sed -i '13i \ \ \ \ \ \ INITRD /boot/initrd' extlinux.conf
-		sudo sed -i '13i \ \ \ \ \ \ LINUX /boot/Image' extlinux.conf
-		sudo sed -i '13i \ \ \ \ \ \ MENU LABEL secondary kernel' extlinux.conf
-		sudo sed -i '13i LABEL secondary' extlinux.conf
 	fi
 	cd ${CUR_DIR}
 
@@ -464,8 +458,9 @@ do_job () {
 	create_kernel_compile_script
 	if [[ $OPTION -eq 3 ]];then
 		compile_kernel_for_24_cam
+	else
+		compile_kernel
 	fi
-	compile_kernel
 
 	if [[ $OPTION -eq 2 ]];then
 		create_u-boot_compile_script
