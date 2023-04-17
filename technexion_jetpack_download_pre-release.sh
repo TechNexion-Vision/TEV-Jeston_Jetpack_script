@@ -169,10 +169,10 @@ sync_tn_source_code() {
 		if [[ $USING_SSH -eq 0 ]];then
 			git clone https://github.com/TechNexion-Vision/TEV_JetsonXavierNX_Cboot.git cboot
 		else
-			git clone tn-github git@github.com:TechNexion-Vision/TEV_JetsonXavierNX_Cboot.git cboot
+			git clone git@github.com:TechNexion-Vision/TEV_JetsonXavierNX_Cboot.git cboot
 		fi
 		cd cboot
-		git pull tn-github
+		git pull origin
 		git checkout ${BRANCH}
 		if [[ $USING_TAG -eq 1 ]];then
 			git reset --hard ${TAG}
