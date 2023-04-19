@@ -317,7 +317,10 @@ create_demo_image (){
 	# copy kernel modules
 	sudo cp -rp Linux_for_Tegra/sources/kernel/modules/lib/ Linux_for_Tegra/rootfs/
 	# copy device-tree
-	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
+	if [ $m == "Nano" ] && [ $b == "EVK" ];then
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-p3448-0000-p3449-0000-b00-tn.dtb Linux_for_Tegra/rootfs/boot/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-p3448-all-p3449-0000-tevi-ap1302-dual.dtbo Linux_for_Tegra/rootfs/boot/
+	elif [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1-no-vizionlink.dtb Linux_for_Tegra/rootfs/boot/ # For DVT
 	elif [[ $m == "Xavier-NX" ]];then
@@ -381,6 +384,9 @@ create_demo_image (){
 	sudo sed -i 's/APPEND \${cbootargs} quiet/APPEND \${cbootargs}/' extlinux.conf
 	if [ $m == "Xavier-NX" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra194-p3668-tek3-nvjetson-a1.dtb' extlinux.conf
+	elif [ $m == "Nano" ] && [ $b == "EVK" ];then
+		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra210-p3448-0000-p3449-0000-b00-tn.dtb' extlinux.conf
+		sudo sed -i '11i \ \ \ \ \ \ FDTOVERLAYS /boot/tegra210-p3448-all-p3449-0000-tevi-ap1302-dual.dtbo' extlinux.conf
 	elif [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra210-tek3-nvjetson-a1.dtb' extlinux.conf
 	elif [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
@@ -393,6 +399,8 @@ create_demo_image (){
 	cd Linux_for_Tegra/
 	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo ./flash.sh --no-flash jetson-nano-devkit-emmc mmcblk0p1
+	elif [ $m == "Nano" ] && [ $b == "EVK" ];then
+		sudo ./flash.sh --no-flash jetson-nano-devkit mmcblk0p1
 	elif [[ $m == "Xavier-NX" ]];then
 		sudo ./flash.sh --no-flash jetson-xavier-nx-devkit-emmc mmcblk0p1
 	fi
