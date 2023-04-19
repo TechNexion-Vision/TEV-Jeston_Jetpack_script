@@ -17,12 +17,12 @@ USING_TAG=1
 
 get_nvidia_jetpack() {
 	echo -ne "\n### Get nvidia jetpack source code\n"
-	if [[ $OPTION -eq 2 ]];then
+	if [[ $m == "Nano" ]];then
 		echo -ne "Download Nano Jetpack\n"
 		JETPACK="https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/t210/jetson-210_linux_r32.7.1_aarch64.tbz2"
 		ROOTFS="https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/t210/tegra_linux_sample-root-filesystem_r32.7.1_aarch64.tbz2"
 		PUBLIC="https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/sources/t210/public_sources.tbz2"
-	else
+	elif [[ $m == "Xavier-NX" ]];then
 		echo -ne "Download Xavier NX Jetpack\n"
 		JETPACK="https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/t186/jetson_linux_r32.7.1_aarch64.tbz2"
 		ROOTFS="https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/t186/tegra_linux_sample-root-filesystem_r32.7.1_aarch64.tbz2"
@@ -73,14 +73,14 @@ sync_tn_source_code() {
 	cd ${CUR_DIR}
 
 	echo -ne "# dts\n"
-	if [[ $OPTION -eq 2 ]];then
+	if [[ $m == "Nano" ]];then
 		cd Linux_for_Tegra/sources/hardware/nvidia/platform/t210/porg/
 		if [[ $USING_SSH -eq 0 ]];then
 			git remote add tn-github https://github.com/TechNexion-Vision/TEV-JetsonNano_device-tree.git
 		else
 			git remote add tn-github git@github.com:TechNexion-Vision/TEV-JetsonNano_device-tree.git
 		fi
-	else
+	elif [[ $m == "Xavier-NX" ]];then
 		cd Linux_for_Tegra/sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/
 		if [[ $USING_SSH -eq 0 ]];then
 			git remote add tn-github https://github.com/TechNexion-Vision/TEV-JetsonXavier-NX_device-tree.git
@@ -111,18 +111,18 @@ sync_tn_source_code() {
 
 	echo -ne "# technexion pinmux file(xlsm)\n"
 	cd Linux_for_Tegra/sources/
-	if [[ $OPTION -eq 1 ]];then
-	if [[ $USING_SSH -eq 0 ]];then
-		git clone https://github.com/TechNexion-Vision/TEV-JetsonXavier-NX_pinmux.git TEK3-NVJETSON_Xavier-NX_pinmux
-	else
-		git clone git@github.com:TechNexion-Vision/TEV-JetsonXavier-NX_pinmux.git TEK3-NVJETSON_Xavier-NX_pinmux
-	fi
+	if [ $m == "Xavier-NX" ] && [ $b == "TEK3-NVJETSON" ];then
+		if [[ $USING_SSH -eq 0 ]];then
+			git clone https://github.com/TechNexion-Vision/TEV-JetsonXavier-NX_pinmux.git TEK3-NVJETSON_Xavier-NX_pinmux
+		else
+			git clone git@github.com:TechNexion-Vision/TEV-JetsonXavier-NX_pinmux.git TEK3-NVJETSON_Xavier-NX_pinmux
+		fi
 		cd TEK3-NVJETSON_Xavier-NX_pinmux
 		git checkout ${TEK3_BRANCH}
 		if [[ $USING_TAG -eq 1 ]];then
 			git reset --hard ${TEK3_TAG}
 		fi
-	elif [[ $OPTION -eq 2 ]];then
+	elif [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		if [[ $USING_SSH -eq 0 ]];then
 			git clone https://github.com/TechNexion-Vision/TEV-JetsonNano_pinmux.git TEK3-NVJETSON_Nano_pinmux
 		else
@@ -133,7 +133,7 @@ sync_tn_source_code() {
 		if [[ $USING_TAG -eq 1 ]];then
 			git reset --hard ${TEK3_TAG}
 		fi
-	elif [[ $OPTION -eq 3 ]];then
+	elif [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
 		if [[ $USING_SSH -eq 0 ]];then
 			git clone https://github.com/TechNexion-Vision/TEV-JetsonXavier-NX_pinmux.git TEK8-NX210V_Xavier-NX_pinmux
 		else
@@ -147,7 +147,7 @@ sync_tn_source_code() {
 	fi
 	cd ${CUR_DIR}
 
-	if [[ $OPTION -eq 2 ]];then
+	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		echo -ne "# u-boot\n"
 		cd Linux_for_Tegra/sources/u-boot/
 		if [[ $USING_SSH -eq 0 ]];then
@@ -163,7 +163,7 @@ sync_tn_source_code() {
 		cd ${CUR_DIR}
 	fi
 
-	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+	if [[ $m == "Xavier-NX" ]];then
 		echo -ne "# cboot\n"
 		cd Linux_for_Tegra/sources/
 		if [[ $USING_SSH -eq 0 ]];then
@@ -306,7 +306,7 @@ compile_cboot (){
 create_demo_image (){
 	echo -ne "\n### create demo_image\n"
 	# copy kernel image
-	if [[ $OPTION -eq 3 ]];then
+	if [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image_24-cam Linux_for_Tegra/kernel/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/Image_24-cam Linux_for_Tegra/rootfs/boot/
 	else
@@ -317,35 +317,35 @@ create_demo_image (){
 	# copy kernel modules
 	sudo cp -rp Linux_for_Tegra/sources/kernel/modules/lib/ Linux_for_Tegra/rootfs/
 	# copy device-tree
-	if [[ $OPTION -eq 2 ]];then
+	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra210-tek3-nvjetson-a1-no-vizionlink.dtb Linux_for_Tegra/rootfs/boot/ # For DVT
-	else
-		if [[ $OPTION -eq 1 ]];then
+	elif [[ $m == "Xavier-NX" ]];then
+		if [[ $b == "TEK3-NVJETSON" ]];then
 			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1.dtb Linux_for_Tegra/rootfs/boot/
 			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek3-nvjetson-a1-no-vizionlink.dtb Linux_for_Tegra/rootfs/boot/ # For DVT
-		else
+		elif [[ $b == "TEK8-NX210V" ]];then
 			sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb Linux_for_Tegra/rootfs/boot/
 		fi
 		# tweak: dp pinmux will use origin dtb, we must update it.
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-4.9/arch/arm64/boot/dts/tegra194-p3668-all-p3509-0000.dtb Linux_for_Tegra/kernel/dtb/
 	fi
 	# copy u-boot.bin (tweak for TEK3-NVJETSON with Nano)
-	if [[ $OPTION -eq 2 ]];then
+	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo cp -rp Linux_for_Tegra/sources/u-boot/u-boot.bin Linux_for_Tegra/bootloader/t210ref/p3450-0000/
 	fi
 	# copy lk.bin of cboot
-	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+	if [ $m == "Xavier-NX" ];then
 		sudo cp -rp Linux_for_Tegra/sources/cboot/out/build-t194/lk.bin Linux_for_Tegra/bootloader/cboot_t194.bin
 	fi
 	# copy pinmux file (Xavier-NX only)
-	if [[ $OPTION -eq 1 ]];then
+	if [ $m == "Xavier-NX" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo cp -rp Linux_for_Tegra/sources/TEK3-NVJETSON_Xavier-NX_pinmux/tegra19x-mb1-pinmux-p3668-a01.cfg Linux_for_Tegra/bootloader/t186ref/BCT/
-	elif [[ $OPTION -eq 3 ]];then
+	elif [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
 		sudo cp -rp Linux_for_Tegra/sources/TEK8-NX210V_Xavier-NX_pinmux/tegra19x-mb1-pinmux-p3668-a01.cfg Linux_for_Tegra/bootloader/t186ref/BCT/
 	fi
 	# copy flash FPGA firmware service
-	if [[ $OPTION -eq 3 ]];then
+	if [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
 		if [[ $USING_SSH -eq 0 ]];then
 			git clone https://github.com/TechNexion-Vision/TEV-JetsonXavier-NX_TEK8_FPGA_Flash.git FPGA
 		else
@@ -379,11 +379,11 @@ create_demo_image (){
 	cd Linux_for_Tegra/rootfs/boot/extlinux/
 	# close quiet for more dmesg
 	sudo sed -i 's/APPEND \${cbootargs} quiet/APPEND \${cbootargs}/' extlinux.conf
-	if [[ $OPTION -eq 1 ]];then
+	if [ $m == "Xavier-NX" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra194-p3668-tek3-nvjetson-a1.dtb' extlinux.conf
-	elif [[ $OPTION -eq 2 ]];then
+	elif [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra210-tek3-nvjetson-a1.dtb' extlinux.conf
-	else
+	elif [ $m == "Xavier-NX" ] && [ $b == "TEK8-NX210V" ];then
 		sudo sed -i 's|LINUX /boot/Image|LINUX /boot/Image_24-cam|' extlinux.conf
 		sudo sed -i '10i \ \ \ \ \ \ FDT /boot/tegra194-p3668-tek8-nx210v-a1-24-cam.dtb' extlinux.conf
 	fi
@@ -391,62 +391,24 @@ create_demo_image (){
 
 	# create new demo_image
 	cd Linux_for_Tegra/
-	if [[ $OPTION -eq 2 ]];then
+	if [ $m == "Nano" ] && [ $b == "TEK3-NVJETSON" ];then
 		sudo ./flash.sh --no-flash jetson-nano-devkit-emmc mmcblk0p1
-	else
+	elif [[ $m == "Xavier-NX" ]];then
 		sudo ./flash.sh --no-flash jetson-xavier-nx-devkit-emmc mmcblk0p1
 	fi
 	cd ${CUR_DIR}
 	echo -ne "done\n"
 }
 
-explain_options() {
-	echo -e "******************************************"
-	echo -e "All Operations."
-	echo -e "******************************************\n"
-	echo -e "1. TEK3-NVJETSON with Jetson Xavier Nx\n"
-	echo -e "2. TEK3-NVJETSON with Jetson Nano\n"
-	echo -e "3. TEK8-NX210V with Jetson Xavier Nx\n"
-}
-
-ask_for_option() {
-	while true;
-	do
-		echo -en "Enter your choise:" && read -s -n1 OPTION
-		echo ${OPTION}|grep -Poi "\d" > /dev/null
-		if [[ $? -eq 0 ]];then
-			break
-		fi
-		echo -e "\nPlease enter 1~3\n"
-	done
-	return ${OPTION}
-}
-
-check_option() {
-	echo -e "\n\n"
-	case "$1" in
-	1)  echo -ne "1. TEK3-NVJETSON with Jetson Xavier Nx\n"
-	    ;;
-	2)  echo -ne "2. TEK3-NVJETSON with Jetson Nano\n"
-	    ;;
-	3)  echo -ne "3. TEK8-NX210V with Jetson Xavier Nx\n"
-	    ;;
-	*)  SKIP=1
-	esac
-
-	if [[ ${SKIP} -eq 1 ]];then
-		echo -e "Wrong input!!\n"
-		SKIP=0
-		return 1
-	fi
-
-	echo -e "Is that your choise?? [Y/N]" && read -s -n1 YESORNO
-	echo -e "\n"
-	if [ "${YESORNO}" = "Y" ] || [ "${YESORNO}" = "y" ];then
-		return 0
-	else
-		return 1
-	fi
+usage() {
+	echo -e "$0 \ndownload the Technexion Jetpack [-m <Xavier-NX|Nano>] [-b <TEK3-NVJETSON|TEK8-NX210V|EVK>]" 1>&2
+	echo "-m: module <Xavier-NX|Nano>" 1>&2
+	echo "-b: baseboard <TEK3-NVJETSON|TEK8-NX210V|EVK>" 1>&2
+	echo "" 1>&2
+	echo "Support combination:" 1>&2
+	echo "Xavier-NX: TEK3-NVJETSON|TEK8-NX210V" 1>&2
+	echo "     Nano: TEK3-NVJETSON|EVK" 1>&2
+	exit 1
 }
 
 do_job () {
@@ -458,18 +420,18 @@ do_job () {
 	create_gcc_tool_chain
 
 	create_kernel_compile_script
-	if [[ $OPTION -eq 3 ]];then
+	if [[ $b == "TEK8-NX210V" ]];then
 		compile_kernel_for_24_cam
 	else
 		compile_kernel
 	fi
 
-	if [[ $OPTION -eq 2 ]];then
+	if [[ $m == "Nano" ]];then
 		create_u-boot_compile_script
 		compile_u-boot
 	fi
 
-	if [ $OPTION -eq 1 ] || [ $OPTION -eq 3 ];then
+	if [ $m == "Xavier-NX" ];then
 		create_cboot_compile_script
 		compile_cboot
 	fi
@@ -486,22 +448,34 @@ if [ "$(id -u)" = "0" ]; then
 	exit 1
 fi
 
-WRONG_OPTION=1
-while [[ ${WRONG_OPTION} -eq 1 ]];
-do
-	explain_options
-	ask_for_option
-	OPTION=$?
-
-	check_option ${OPTION}
-
-	RET=$?
-	if [[ $RET -eq 0 ]];then
-		WRONG_OPTION=0
-	else
-		WRONG_OPTION=1
-	fi
+while getopts ":m:b:" o; do
+    case "${o}" in
+        m)
+            m=${OPTARG}
+	    if [ ${m} != "Xavier-NX" ] && [ ${m} != "Nano" ];then
+		    echo -e "### invalid module\n\n"; usage
+	    fi
+            ;;
+        b)
+            b=${OPTARG}
+	    if [ ${b} != 'TEK3-NVJETSON' ] && [ ${b} != "TEK8-NX210V" ] && [ ${b} != "EVK" ];then
+		    echo -e "### invalid baseboard\n\n"; usage
+	    fi
+            ;;
+        *)
+            usage
+            ;;
+    esac
 done
+shift $((OPTIND-1))
+
+if [ -z "${m}" ] || [ -z "${b}" ]; then
+	echo -e "### lack of option\n\n" && usage
+elif ([ "${m}" == "Xavier-NX" ] && [ "${b}" == "EVK" ]) || ([ "${m}" == "Nano" ] && [ "${b}" == "TEK8-NVJETSON" ]);then
+	echo -e "### invalid combination\n\n" && usage
+fi
+
+echo valid input: m=$m, b=$b
 
 # install build require package
 echo -ne "####install build require package\n"
