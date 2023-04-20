@@ -450,6 +450,15 @@ do_job () {
 
 
 ### Script start from here
+set -e
+
+Error_appears () {
+    if [ $? -ne 0 ]
+    then
+        echo "##### script was running failed due to previous error!! #####"
+    fi
+}
+trap Error_appears EXIT
 
 if [ "$(id -u)" = "0" ]; then
 	echo "This script can not be run as root"
