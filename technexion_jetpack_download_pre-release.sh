@@ -65,8 +65,8 @@ sync_tn_source_code() {
 	else
 		git remote add tn-github git@github.com:TechNexion-Vision/TEV-Jetson_kernel.git
 	fi
-	git pull tn-github
-	git checkout $BRANCH
+	git fetch tn-github ${BRANCH}
+	git checkout -b ${BRANCH} tn-github/${BRANCH}
 	if [[ $USING_TAG -eq 1 ]];then
 		git reset --hard $TAG
 	fi
@@ -88,8 +88,8 @@ sync_tn_source_code() {
 			git remote add tn-github git@github.com:TechNexion-Vision/TEV-JetsonXavier-NX_device-tree.git
 		fi	
 	fi
-	git pull tn-github
-	git checkout $BRANCH
+	git fetch tn-github ${BRANCH}
+	git checkout -b ${BRANCH} tn-github/${BRANCH}
 	if [[ $USING_TAG -eq 1 ]];then
 		git reset --hard $TAG
 	fi
@@ -155,8 +155,8 @@ sync_tn_source_code() {
 		else
 			git remote add tn-github git@github.com:TechNexion-Vision/TEV-JetsonNano_u-boot.git
 		fi
-		git pull tn-github
-		git checkout ${TEK3_BRANCH}
+		git fetch tn-github ${TEK3_BRANCH}
+		git checkout -b ${TEK3_BRANCH} tn-github/${TEK3_BRANCH}
 		if [[ $USING_TAG -eq 1 ]];then
 			git reset --hard ${TEK3_TAG}
 		fi
