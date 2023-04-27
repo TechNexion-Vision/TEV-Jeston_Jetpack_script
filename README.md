@@ -32,12 +32,10 @@ Download script from [raw.github](https://raw.githubusercontent.com/TechNexion-V
 $ sudo chmod 777 technexion_jetpack_download_pre-release.sh
 
 # Run the script to download Jetpack and Technexion sources
-$ ./technexion_jetpack_download_pre-release.sh
-
-# chosing your SOC and board.
-# 1. TEK3-NVJETSON with Jetson Xavier Nx
-# 2. TEK3-NVJETSON with Jetson Nano
-# 3. TEK8-NX210V with Jetson Xavier Nx
+# example1:
+$ ./technexion_jetpack_download_pre-release.sh -m Xavier-NX -b TEK8-NX210V
+# example2:
+$ ./technexion_jetpack_download_pre-release.sh -m Nano -b EVK
 ```
 ## 2. Flash demo image from TEV-Jetpack
 
