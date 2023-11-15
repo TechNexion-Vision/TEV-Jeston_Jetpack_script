@@ -3,14 +3,13 @@
 TIME=$(date +'%Y%m%d')
 CUR_DIR="$(pwd)/"
 NV_TAG="jetson_35.3.1"
-TAG="pre-release"
 TEK_TAG="${TAG}_TEK-ORIN-a1"
 BRANCH="tn_l4t-r35.3.ga_kernel-5.10"
 TEK_BRANCH="${BRANCH}_TEK-ORIN-a1"
-# Wether using ssh to download github source code
-USING_SSH=1
 
-# Wether using tag to download stable release
+VALID_BASEBOARD=("TEK6020-ORIN" "TEK6040-ORIN" "TEK6070-ORIN" "TEK6100-ORIN")
+VALID_TAG=("")
+
 USING_TAG=0
 
 get_nvidia_jetpack() {
@@ -307,20 +306,28 @@ if [ "$(id -u)" = "0" ]; then
 	exit 1
 fi
 
-VALID_BASEBOARD=("TEK6020-ORIN" "TEK6040-ORIN" "TEK6070-ORIN" "TEK6100-ORIN")
-
-while getopts ":m:b:" o; do
+while getopts ":b:t:" o; do
 	case "${o}" in
 	b)
 		b=${OPTARG}
 		if [[ ! ${VALID_BASEBOARD[@]} =~ $b ]]
 		then
 			echo -e "invalid baseboard option!!\n"
+			usage
 		fi
             ;;
+	t)
+		t=${OPTARG}
+		if [[ ! ${VALID_TAG[@]} =~ $t ]];then
+			echo -e "invalid tag option!!\n"
+			echo -e "If you want to using no tag, just don't add this option!!\n"
+			usage
+		fi
+		USING_TAG=1
+		;;
         *)
-            usage
-            ;;
+		usage
+		;;
     esac
 done
 shift $((OPTIND-1))
@@ -335,6 +342,13 @@ if [[ $b == *"ORIN"* ]]; then
 	SOM=Orin
 fi
 
+if [ -z "${t}" ]; then
+	echo -e "### lack of tag, using lastest code.\n\n"
+else
+	echo "valid input: t=$t"
+fi
+
+
 # install build require package
 echo -ne "####install build require package\n"
 sudo apt-get update -y
@@ -348,5 +362,11 @@ python-pysqlite2 help2man desktop-file-utils \
 libgl1-mesa-dev libglu1-mesa-dev mercurial autoconf automake \
 groff curl lzop asciidoc u-boot-tools libreoffice-writer \
 sshpass ssh-askpass zip xz-utils kpartx vim screen libssl-dev
+
+if [[ $(ssh -T -y git@github.com -o StrictHostKeyChecking=no; echo $?) -eq 1 ]];then
+	USING_SSH=1
+else
+	USING_SSH=0
+fi
 
 do_job
