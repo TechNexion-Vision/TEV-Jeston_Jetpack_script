@@ -7,7 +7,8 @@ TEK_TAG="${TAG}_TEK-ORIN-a1"
 BRANCH="tn_l4t-r35.3.ga_kernel-5.10"
 TEK_BRANCH="${BRANCH}_TEK-ORIN-a1"
 
-VALID_BASEBOARD=("TEK6020-ORIN" "TEK6040-ORIN" "TEK6070-ORIN" "TEK6100-ORIN")
+VALID_BASEBOARD=("TEK6020-ORIN" "TEK6040-ORIN" "TEK6070-ORIN" "TEK6100-ORIN" \
+		"TEV-RPI22-TEVI" "TEV-RPI22-TEVS" "VLS3-ORIN-EVK-TEVI" "VLS3-ORIN-EVK-TEVS")
 VALID_TAG=("")
 
 USING_TAG=0
@@ -184,6 +185,7 @@ create_demo_image (){
 	# copy device-tree
 	if [[ $SOM == "Orin" ]];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-000*-tek-orin-a1.dtb Linux_for_Tegra/kernel/dtb/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-0003-p3768-0000-a0-*.dtb Linux_for_Tegra/kernel/dtb/
 	fi
 	# copy pinmux file
 	if [[ $b == *"ORIN"* ]];then
@@ -237,7 +239,7 @@ create_demo_image (){
 	sed -zi 's|#show_eula\n|show_eula\n|' Linux_for_Tegra/tools/l4t_create_default_user.sh
 
 	# copy all machine conf to folder
-	cp -rv tn-tek6*-orin.conf Linux_for_Tegra/
+	cp -rv tn-*.conf Linux_for_Tegra/
 
 	# create new demo_image
 	cd Linux_for_Tegra/
@@ -257,6 +259,22 @@ create_demo_image (){
 		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
 				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
 				--showlogs --no-flash --network usb0 tn-tek6100-orin internal
+	elif [[ $b == TEV-RPI22-TEVI ]];then
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
+				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+				--showlogs --no-flash --network usb0 tn-tev-rpi22-tevi internal
+	elif [[ $b == TEV-RPI22-TEVS ]];then
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
+				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+				--showlogs --no-flash --network usb0 tn-tev-rpi22-tevs internal
+	elif [[ $b == VLS3-ORIN-EVK-TEVI ]];then
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
+				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+				--showlogs --no-flash --network usb0 tn-vls3-orin-evk-tevi internal
+	elif [[ $b == VLS3-ORIN-EVK-TEVS ]];then
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
+				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+				--showlogs --no-flash --network usb0 tn-vls3-orin-evk-tevs internal
 	fi
 	cd ${CUR_DIR}
 	echo -ne "done\n"
@@ -264,10 +282,16 @@ create_demo_image (){
 
 usage() {
 	echo -e "$0 \ndownload the Technexion Jetpack -b <baseboard>" 1>&2
-	echo "-b: baseboard <TEK6020-ORIN/ TEK6040-ORIN/ TEK6070-ORIN/ TEK6100-ORIN>" 1>&2
+	echo "-b: baseboard <TEK6020-ORIN/ TEK6040-ORIN/ TEK6070-ORIN/ TEK6100-ORIN/ ORIN-EVK-RPI22-TEVS" 1>&2
+	echo "               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-TEVI/ VLS3-ORIN-EVK-TEVS>" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin series:" 1>&2
 	echo "TEK6020-ORIN| TEK6040-ORIN| TEK6070-ORIN| TEK6100-ORIN" 1>&2
+	echo "" 1>&2
+	echo "Jetson Orin EVK series:" 1>&2
+	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-TEVI| VLS3-ORIN-EVK-TEVS" 1>&2
+	echo "" 1>&2
+	echo "-t: tag for sync code <>" 1>&2
 	exit 1
 }
 
@@ -348,6 +372,8 @@ fi
 echo valid input: b=$b
 
 if [[ $b == *"ORIN"* ]]; then
+	SOM=Orin
+elif [[ $b == *"RPI22"* ]]; then
 	SOM=Orin
 fi
 
