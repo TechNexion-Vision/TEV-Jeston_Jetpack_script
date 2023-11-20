@@ -309,21 +309,30 @@ fi
 while getopts ":b:t:" o; do
 	case "${o}" in
 	b)
-		b=${OPTARG}
-		if [[ ! ${VALID_BASEBOARD[@]} =~ $b ]]
-		then
+		for k in "${VALID_BASEBOARD[@]}"; do
+			if [[ "$k" == "${OPTARG}" ]]; then
+				b=${OPTARG}
+				break
+			fi
+		done
+		if [[ -z ${b} ]];then
 			echo -e "invalid baseboard option!!\n"
 			usage
 		fi
             ;;
 	t)
-		t=${OPTARG}
-		if [[ ! ${VALID_TAG[@]} =~ $t ]];then
+		USING_TAG=1
+		for k in "${VALID_TAG[@]}"; do
+			if [[ "$k" == "${OPTARG}" ]]; then
+				t=${OPTARG}
+				break
+			fi
+		done
+		if [[ -z ${t} ]];then
 			echo -e "invalid tag option!!\n"
 			echo -e "If you want to using no tag, just don't add this option!!\n"
 			usage
 		fi
-		USING_TAG=1
 		;;
         *)
 		usage
