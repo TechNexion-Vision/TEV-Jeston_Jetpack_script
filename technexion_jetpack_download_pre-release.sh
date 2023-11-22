@@ -185,7 +185,9 @@ create_demo_image (){
 	# copy device-tree
 	if [[ $SOM == "Orin" ]];then
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-000*-tek-orin-a1.dtb Linux_for_Tegra/kernel/dtb/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-000*-tek-orin-a1.dtb Linux_for_Tegra/rootfs/boot/
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-0003-p3768-0000-a0-*.dtb Linux_for_Tegra/kernel/dtb/
+		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-0003-p3768-0000-a0-*.dtb Linux_for_Tegra/rootfs/boot/
 	fi
 	# copy pinmux file
 	if [[ $b == *"ORIN"* ]];then
