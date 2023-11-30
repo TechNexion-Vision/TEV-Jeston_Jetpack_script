@@ -401,8 +401,10 @@ groff curl lzop asciidoc u-boot-tools libreoffice-writer \
 sshpass ssh-askpass zip xz-utils kpartx vim screen libssl-dev
 
 if [[ $(ssh -T -y git@github.com -o StrictHostKeyChecking=no; echo $?) -eq 1 ]];then
+	echo -e "check github HostKey success, using ssh to download code.\n"
 	USING_SSH=1
 else
+	echo -e "check github HostKey failed, using Https to download code.\n"
 	USING_SSH=0
 fi
 
