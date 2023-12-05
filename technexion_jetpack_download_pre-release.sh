@@ -240,6 +240,11 @@ create_demo_image (){
 	sudo Linux_for_Tegra/tools/l4t_create_default_user.sh -u ubuntu -p ubuntu -a
 	sed -zi 's|#show_eula\n|show_eula\n|' Linux_for_Tegra/tools/l4t_create_default_user.sh
 
+	# change background to TecnNexion logo
+	wget -c -t 5 --no-check-certificate https://ftp.technexion.com/development_resources/.technexion_logo/PPT2.jpg
+	sudo mv PPT2.jpg Linux_for_Tegra/rootfs/usr/share/backgrounds/
+	sudo sed -i 's|nv_background="/usr/share/backgrounds/NVIDIA_Wallpaper.jpg"|nv_background="/usr/share/backgrounds/PPT2.jpg"|' Linux_for_Tegra/rootfs/etc/xdg/autostart/nvbackground.sh
+
 	# copy all machine conf to folder
 	cp -rv tn-*.conf Linux_for_Tegra/
 
