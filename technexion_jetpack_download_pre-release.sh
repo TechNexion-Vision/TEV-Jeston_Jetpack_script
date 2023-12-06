@@ -396,14 +396,15 @@ echo -ne "####install build require package\n"
 sudo apt-get update -y
 sudo apt-get install -y qemu-user-static bc kmod flex
 sudo apt-get install -y gawk wget git git-core diffstat unzip texinfo gcc-multilib build-essential \
-chrpath socat cpio python python3 python3-pip python3-pexpect \
-python3-git python3-jinja2 libegl1-mesa pylint3 rsync bc bison \
+chrpath socat cpio python-is-python3 python3 python3-pip python3-pexpect \
+python3-git python3-jinja2 libegl1-mesa rsync bc bison \
 xz-utils debianutils iputils-ping libsdl1.2-dev xterm \
 language-pack-en coreutils texi2html file docbook-utils \
-python-pysqlite2 help2man desktop-file-utils \
+help2man desktop-file-utils \
 libgl1-mesa-dev libglu1-mesa-dev mercurial autoconf automake \
 groff curl lzop asciidoc u-boot-tools libreoffice-writer \
-sshpass ssh-askpass zip xz-utils kpartx vim screen libssl-dev
+sshpass ssh-askpass zip xz-utils kpartx vim screen libssl-dev \
+abootimg nfs-kernel-server
 
 if [[ $(ssh -T -y git@github.com -o StrictHostKeyChecking=no; echo $?) -eq 1 ]];then
 	echo -e "check github HostKey success, using ssh to download code.\n"
