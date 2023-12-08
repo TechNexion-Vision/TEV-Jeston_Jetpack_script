@@ -279,6 +279,13 @@ create_demo_image (){
 	sudo mv PPT2.jpg Linux_for_Tegra/rootfs/usr/share/backgrounds/
 	sudo sed -i 's|nv_background="/usr/share/backgrounds/NVIDIA_Wallpaper.jpg"|nv_background="/usr/share/backgrounds/PPT2.jpg"|' Linux_for_Tegra/rootfs/etc/xdg/autostart/nvbackground.sh
 
+	# tweak mb2 dts to make HDMI support 4K
+	sed -i '8i\\' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
+	sed -i '8i\ \ \ \ \ \ \ \ };' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
+	sed -i '8i\ \ \ \ \ \ \ \ \ \ \ \ value = <0x38009696>;' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
+	sed -i '8i\ \ \ \ \ \ \ \ \ \ \ \ exclusion-info = <2>;' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
+	sed -i '8i\ \ \ \ \ \ \ \ reg@322 { /* GPIO_M_SCR_00_0 */' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
+
 	# copy all machine conf to folder
 	cp -rv tn-*.conf Linux_for_Tegra/
 
