@@ -312,9 +312,15 @@ create_demo_image (){
 
 	# create new demo_image
 	cd Linux_for_Tegra/
-	sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device ${rootfs_dev_p1[0]} -c tools/kernel_flash/flash_l4t_external.xml \
+	if [[ ${qspi_only} -eq 1 ]];then
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh \
 			-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
 			--showlogs --no-flash --network usb0 ${board_conf} internal
+	else
+		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device ${rootfs_dev_p1[0]} -c tools/kernel_flash/flash_l4t_external.xml \
+			-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+			--showlogs --no-flash --network usb0 ${board_conf} internal
+	fi
 	cd ${CUR_DIR}
 	echo -ne "done\n"
 }
@@ -331,6 +337,8 @@ usage() {
 	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-TEVI| VLS3-ORIN-EVK-TEVS" 1>&2
 	echo "" 1>&2
 	echo "-t: tag for sync code <>" 1>&2
+	echo "" 1>&2
+	echo "--qspi-only: do not create/ flash rootfs, for qspi image only" 1>&2
 	exit 1
 }
 
@@ -409,6 +417,8 @@ do_job () {
 	echo -ne "\n### Finish\n"
 }
 
+# default variables
+qspi_only=0
 
 ### Script start from here
 set -e
@@ -426,7 +436,7 @@ if [ "$(id -u)" = "0" ]; then
 	exit 1
 fi
 
-while getopts ":b:t:" o; do
+while getopts ":b:t:-:" o; do
 	case "${o}" in
 	b)
 		b=${OPTARG}; setup_env_vars ${b}
@@ -445,10 +455,16 @@ while getopts ":b:t:" o; do
 			usage
 		fi
 		;;
+	-) case ${OPTARG} in
+		qspi-only)
+			qspi_only=1
+			;;
+		*) usage allunknown 1; ;;
+		esac;;
         *)
 		usage
 		;;
-    esac
+	esac
 done
 shift $((OPTIND-1))
 
