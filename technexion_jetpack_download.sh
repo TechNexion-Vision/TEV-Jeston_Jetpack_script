@@ -95,7 +95,7 @@ sync_tn_source_code() {
 
 	echo -ne "# technexion pinmux file(xlsm)\n"
 	cd Linux_for_Tegra/sources/
-	if [[ $b == *"ORIN"* ]];then
+	if [[ $SOM == "Orin" ]]; then
 		if [[ $USING_SSH -eq 0 ]];then
 			git clone https://github.com/TechNexion-Vision/TEV-JetsonOrin-Nano_pinmux.git TEK-ORIN_Orin-Nano_pinmux
 		else
@@ -190,7 +190,7 @@ create_demo_image (){
 		sudo cp -rp Linux_for_Tegra/sources/kernel/kernel-5.10/arch/arm64/boot/dts/nvidia/tegra234-p3767-0003-p3768-0000-a0-*.dtb Linux_for_Tegra/rootfs/boot/
 	fi
 	# copy pinmux file
-	if [[ $b == *"ORIN"* ]];then
+	if [[ $SOM == "Orin" ]]; then
 		sudo cp -rp Linux_for_Tegra/sources/TEK-ORIN_Orin-Nano_pinmux/Orin-tek-orin-a1-gpio-default.dtsi Linux_for_Tegra/bootloader/
 		sudo cp -rp Linux_for_Tegra/sources/TEK-ORIN_Orin-Nano_pinmux/Orin-tek-orin-a1-pinmux.dtsi Linux_for_Tegra/bootloader/t186ref/BCT/
 		# change firewall rule for PWM7
@@ -287,10 +287,11 @@ create_demo_image (){
 	sed -i '8i\ \ \ \ \ \ \ \ reg@322 { /* GPIO_M_SCR_00_0 */' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
 
 	# download camera demo script
-	wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/video_orin-Banner-TEK.jpg
-	sudo mv video_orin-Banner-TEK.jpg Linux_for_Tegra/rootfs/home/ubuntu/
-	sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/video_orin-Banner-TEK.jpg
-	if [[ $b == *VLS3* ]]; then
+	if [[ $SOM == "Orin" ]];then
+		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/video_orin-Banner-TEK.jpg
+		sudo mv video_orin-Banner-TEK.jpg Linux_for_Tegra/rootfs/home/ubuntu/
+		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/video_orin-Banner-TEK.jpg
+
 		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/run_aeq_EVK.sh
 		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/TechNexion_8_Cam_Demo_EVK.sh
 		sudo mv run_aeq_EVK.sh Linux_for_Tegra/rootfs/home/ubuntu/
@@ -298,7 +299,6 @@ create_demo_image (){
 		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/run_aeq_EVK.sh
 		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/TechNexion_8_Cam_Demo_EVK.sh
 
-	elif [[ $b == *TEK* ]]; then
 		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/run_aeq_TEK.sh
 		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/TechNexion_8_Cam_Demo_TEK.sh
 		sudo mv run_aeq_TEK.sh Linux_for_Tegra/rootfs/home/ubuntu/
