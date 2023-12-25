@@ -312,39 +312,9 @@ create_demo_image (){
 
 	# create new demo_image
 	cd Linux_for_Tegra/
-	if [[ $b == TEK6020-ORIN ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tek6020-orin internal
-	elif [[ $b == TEK6040-ORIN ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tek6040-orin internal
-	elif [[ $b == TEK6070-ORIN ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tek6070-orin internal
-	elif [[ $b == TEK6100-ORIN ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tek6100-orin internal
-	elif [[ $b == TEV-RPI22-TEVI ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tev-rpi22-tevi internal
-	elif [[ $b == TEV-RPI22-TEVS ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-tev-rpi22-tevs internal
-	elif [[ $b == VLS3-ORIN-EVK-TEVI ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-vls3-orin-evk-tevi internal
-	elif [[ $b == VLS3-ORIN-EVK-TEVS ]];then
-		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device mmcblk1p1 \
-				-c tools/kernel_flash/flash_l4t_external.xml -p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-				--showlogs --no-flash --network usb0 tn-vls3-orin-evk-tevs internal
-	fi
+	sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device ${rootfs_dev_p1[0]} -c tools/kernel_flash/flash_l4t_external.xml \
+			-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+			--showlogs --no-flash --network usb0 ${board_conf} internal
 	cd ${CUR_DIR}
 	echo -ne "done\n"
 }
@@ -362,6 +332,63 @@ usage() {
 	echo "" 1>&2
 	echo "-t: tag for sync code <>" 1>&2
 	exit 1
+}
+
+setup_env_vars () {
+	case $1 in
+		TEK6020-ORIN)
+			board_conf="tn-tek6020-orin"
+			rootfs_dev=("NVMe" "USB")
+			rootfs_dev_p1=("nvme0n1p1" "sda1")
+			l4t_folder="TEK6020-ORIN"
+			;;
+		TEK6040-ORIN)
+			board_conf="tn-tek6040-orin"
+			rootfs_dev=("NVMe" "USB")
+			rootfs_dev_p1=("nvme0n1p1" "sda1")
+			l4t_folder="TEK6020-ORIN"
+			;;
+		TEK6070-ORIN)
+			board_conf="tn-tek6070-orin"
+			rootfs_dev=("NVMe" "USB")
+			rootfs_dev_p1=("nvme0n1p1" "sda1")
+			l4t_folder="TEK6020-ORIN"
+			;;
+		TEK6100-ORIN)
+			board_conf="tn-tek6100-orin"
+			rootfs_dev=("NVMe" "USB")
+			rootfs_dev_p1=("nvme0n1p1" "sda1")
+			l4t_folder="TEK6020-ORIN"
+			;;
+		TEV-RPI22-TEVI)
+			board_conf="tn-tev-rpi22-tevi"
+			rootfs_dev=("SD" "USB")
+			rootfs_dev_p1=("mmcblk1p1" "sda1")
+			l4t_folder="TEV-RPI22-TEVI"
+			;;
+		TEV-RPI22-TEVS)
+			board_conf="tn-tev-rpi22-tevs"
+			rootfs_dev=("SD" "USB")
+			rootfs_dev_p1=("mmcblk1p1" "sda1")
+			l4t_folder="TEV-RPI22-TEVI"
+			;;
+		VLS3-ORIN-EVK-TEVI)
+			board_conf="tn-vls3-orin-evk-tevi"
+			rootfs_dev=("SD" "USB")
+			rootfs_dev_p1=("mmcblk1p1" "sda1")
+			l4t_folder="VLS3-ORIN-EVK-TEVI"
+			;;
+		VLS3-ORIN-EVK-TEVS)
+			board_conf="tn-vls3-orin-evk-tevs"
+			rootfs_dev=("SD" "USB")
+			rootfs_dev_p1=("mmcblk1p1" "sda1")
+			l4t_folder="VLS3-ORIN-EVK-TEVI"
+			;;
+		*)
+			echo -e "invalid baseboard option!!\n"
+			usage
+			;;
+	esac
 }
 
 do_job () {
@@ -402,17 +429,8 @@ fi
 while getopts ":b:t:" o; do
 	case "${o}" in
 	b)
-		for k in "${VALID_BASEBOARD[@]}"; do
-			if [[ "$k" == "${OPTARG}" ]]; then
-				b=${OPTARG}
-				break
-			fi
-		done
-		if [[ -z ${b} ]];then
-			echo -e "invalid baseboard option!!\n"
-			usage
-		fi
-            ;;
+		b=${OPTARG}; setup_env_vars ${b}
+		;;
 	t)
 		USING_TAG=1
 		for k in "${VALID_TAG[@]}"; do
