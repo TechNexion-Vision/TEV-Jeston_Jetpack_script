@@ -307,6 +307,21 @@ create_demo_image (){
 		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/TechNexion_8_Cam_Demo_TEK.sh
 	fi
 
+	# download disk image creator script
+	if [[ $USING_SSH -eq 0 ]];then
+		git clone https://github.com/TechNexion-Vision/TEV-Jetson_disk_image_creator.git TEV-Jetson_disk_image_creator
+	else
+		git clone git@github.com:TechNexion-Vision/TEV-Jetson_disk_image_creator.git TEV-Jetson_disk_image_creator
+	fi
+	cd TEV-Jetson_disk_image_creator
+	git checkout ${BRANCH}
+	if [[ $USING_TAG -eq 1 ]];then
+		git reset --hard ${TAG}
+	fi
+	cd ${CUR_DIR}
+	sudo cp -rp TEV-Jetson_disk_image_creator/jetson-disk-image-creator.sh Linux_for_Tegra/tools/
+	rm -rf TEV-Jetson_disk_image_creator/
+
 	# copy all machine conf to folder
 	cp -rv tn-*.conf Linux_for_Tegra/
 
