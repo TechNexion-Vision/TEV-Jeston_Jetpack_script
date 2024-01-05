@@ -340,14 +340,14 @@ create_demo_image (){
 
 usage() {
 	echo -e "$0 \ndownload the Technexion Jetpack -b <baseboard>" 1>&2
-	echo "-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX/ ORIN-EVK-RPI22-TEVS" 1>&2
-	echo "               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-TEVI/ VLS3-ORIN-EVK-TEVS>" 1>&2
+	echo "-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX" 1>&2
+	echo "               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-VLS3/ VLS3-ORIN-EVK-VLI>" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin series:" 1>&2
 	echo "TEK6020-ORIN-NANO| TEK6040-ORIN-NANO| TEK6070-ORIN-NX| TEK6100-ORIN-NX" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin EVK series:" 1>&2
-	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-TEVI| VLS3-ORIN-EVK-TEVS" 1>&2
+	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-VLS3| VLS3-ORIN-EVK-VLI" 1>&2
 	echo "" 1>&2
 	echo "-t: tag for sync code <>" 1>&2
 	echo "" 1>&2
@@ -387,13 +387,13 @@ setup_env_vars () {
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
 			;;
-		VLS3-ORIN-EVK-TEVI)
-			board_conf="tn-vls3-orin-evk-tevi"
+		VLS3-ORIN-EVK-VLI)
+			board_conf="tn-vls3-orin-evk-vli"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
 			;;
-		VLS3-ORIN-EVK-TEVS)
-			board_conf="tn-vls3-orin-evk-tevs"
+		VLS3-ORIN-EVK-VLS3)
+			board_conf="tn-vls3-orin-evk-vls3"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
 			;;
