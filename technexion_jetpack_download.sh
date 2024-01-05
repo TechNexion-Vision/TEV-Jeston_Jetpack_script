@@ -7,8 +7,6 @@ TEK_TAG="${TAG}_TEK-ORIN-a1"
 BRANCH="tn_l4t-r35.3.ga_kernel-5.10"
 TEK_BRANCH="${BRANCH}_TEK-ORIN-a1"
 
-VALID_BASEBOARD=("TEK6020-ORIN" "TEK6040-ORIN" "TEK6070-ORIN" "TEK6100-ORIN" \
-		"TEV-RPI22-TEVI" "TEV-RPI22-TEVS" "VLS3-ORIN-EVK-TEVI" "VLS3-ORIN-EVK-TEVS")
 VALID_TAG=("")
 
 USING_TAG=0
@@ -342,11 +340,11 @@ create_demo_image (){
 
 usage() {
 	echo -e "$0 \ndownload the Technexion Jetpack -b <baseboard>" 1>&2
-	echo "-b: baseboard <TEK6020-ORIN/ TEK6040-ORIN/ TEK6070-ORIN/ TEK6100-ORIN/ ORIN-EVK-RPI22-TEVS" 1>&2
+	echo "-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX/ ORIN-EVK-RPI22-TEVS" 1>&2
 	echo "               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-TEVI/ VLS3-ORIN-EVK-TEVS>" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin series:" 1>&2
-	echo "TEK6020-ORIN| TEK6040-ORIN| TEK6070-ORIN| TEK6100-ORIN" 1>&2
+	echo "TEK6020-ORIN-NANO| TEK6040-ORIN-NANO| TEK6070-ORIN-NX| TEK6100-ORIN-NX" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin EVK series:" 1>&2
 	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-TEVI| VLS3-ORIN-EVK-TEVS" 1>&2
@@ -359,53 +357,45 @@ usage() {
 
 setup_env_vars () {
 	case $1 in
-		TEK6020-ORIN)
-			board_conf="tn-tek6020-orin"
+		TEK6020-ORIN-NANO)
+			board_conf="tn-tek6020-orin-nano"
 			rootfs_dev=("NVMe" "USB")
 			rootfs_dev_p1=("nvme0n1p1" "sda1")
-			l4t_folder="TEK6020-ORIN"
 			;;
-		TEK6040-ORIN)
-			board_conf="tn-tek6040-orin"
+		TEK6040-ORIN-NANO)
+			board_conf="tn-tek6040-orin-nano"
 			rootfs_dev=("NVMe" "USB")
 			rootfs_dev_p1=("nvme0n1p1" "sda1")
-			l4t_folder="TEK6020-ORIN"
 			;;
-		TEK6070-ORIN)
-			board_conf="tn-tek6070-orin"
+		TEK6070-ORIN-NX)
+			board_conf="tn-tek6070-orin-nx"
 			rootfs_dev=("NVMe" "USB")
 			rootfs_dev_p1=("nvme0n1p1" "sda1")
-			l4t_folder="TEK6020-ORIN"
 			;;
-		TEK6100-ORIN)
-			board_conf="tn-tek6100-orin"
+		TEK6100-ORIN-NX)
+			board_conf="tn-tek6100-orin-nx"
 			rootfs_dev=("NVMe" "USB")
 			rootfs_dev_p1=("nvme0n1p1" "sda1")
-			l4t_folder="TEK6020-ORIN"
 			;;
 		TEV-RPI22-TEVI)
 			board_conf="tn-tev-rpi22-tevi"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
-			l4t_folder="TEV-RPI22-TEVI"
 			;;
 		TEV-RPI22-TEVS)
 			board_conf="tn-tev-rpi22-tevs"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
-			l4t_folder="TEV-RPI22-TEVI"
 			;;
 		VLS3-ORIN-EVK-TEVI)
 			board_conf="tn-vls3-orin-evk-tevi"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
-			l4t_folder="VLS3-ORIN-EVK-TEVI"
 			;;
 		VLS3-ORIN-EVK-TEVS)
 			board_conf="tn-vls3-orin-evk-tevs"
 			rootfs_dev=("SD" "USB")
 			rootfs_dev_p1=("mmcblk1p1" "sda1")
-			l4t_folder="VLS3-ORIN-EVK-TEVI"
 			;;
 		*)
 			echo -e "invalid baseboard option!!\n"
