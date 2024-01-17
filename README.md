@@ -1,46 +1,65 @@
-## Introduction
-
-[![Producer: Technexion](https://img.shields.io/badge/Producer-Technexion-blue.svg)](https://www.technexion.com)
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+![video_orin-Banner-TEK(1) >](https://github.com/TechNexion-Vision/TEV-Jetson_Jetpack_script/assets/83322668/f699fae3-22a0-4eb0-9334-023286b953ca)
 
 This script contains a complete system package that enables your Jeston Jetpack to directly support TechNexion embedded vision devices.
 
-## 1. Install required packages
-```coffeescript
-$: sudo apt-get install gawk wget git git-core diffstat unzip texinfo gcc-multilib build-essential \
-chrpath socat cpio python python3 python3-pip python3-pexpect \
-python3-git python3-jinja2 libegl1-mesa pylint3 rsync bc bison \
-xz-utils debianutils iputils-ping libsdl1.2-dev xterm \
-language-pack-en coreutils texi2html file docbook-utils \
-python-pysqlite2 help2man desktop-file-utils \
-libgl1-mesa-dev libglu1-mesa-dev mercurial autoconf automake \
-groff curl lzop asciidoc u-boot-tools libreoffice-writer \
-sshpass ssh-askpass zip xz-utils kpartx vim screen flex
+## 1. Prepare ubuntu environment
+Download Ubuntu 20.04/ 22.04 iso file from [ubuntu web site](https://ubuntu.com/download/desktop).
+
+This script supports native Ubuntu or Ubuntu VM.
+
+## 2. Create TN Jetpack base on your device.
+### Prepare git command in your ubuntu
+```Bash
+$ sudo apt-get update -y
+$ sudo apt-get install git -y
 ```
 
-## 2. Create TEV-Jetpack base on your device.
-
-### Create and enter the nvidia workspace folder
-```coffeescript
-$ mkdir <nvidia_folder> && cd <nvidia_folder>
+### Create the nvidia workspace folder
+```Bash
+# Select one folder for Nvidia workspace
+$ cd <workspace>
+$ mkdir <nvidia_folder>
 ```
 
-### Download the TN-Jetpack using the script
-Download script from [raw.github](https://raw.githubusercontent.com/TechNexion-Vision/TEV-Jetson_Jetpack_script/master/technexion_jetpack_download_pre-release.sh) and run.
-```coffeescript
-# Change the script permission
-$ sudo chmod 777 technexion_jetpack_download_pre-release.sh
+### Download the TN Jetpack
+```Bash
+$ git clone https://github.com/TechNexion-Vision/TEV-Jetson_Jetpack_script.git
 
+# Copy script and conf file to your work folder
+$ cp -rv TEV-Jetson_Jetpack_script/technexion_jetpack_download.sh <nvidia_folder>
+$ cp -rv TEV-Jetson_Jetpack_script/*conf <nvidia_folder>
+$ cd <nvidia_folder>
+```
+### run the script
+```Bash
 # Run the script to download Jetpack and Technexion sources
 # example1:
-$ ./technexion_jetpack_download_pre-release.sh -m Xavier-NX -b TEK8-NX210V
+$ ./technexion_jetpack_download.sh -b TEK6100-ORIN-NX
 # example2:
-$ ./technexion_jetpack_download_pre-release.sh -m Nano -b EVK
+$ ./technexion_jetpack_download.sh -b VLS3-ORIN-EVK-VLS3
 ```
-## 2. Flash demo image from TEV-Jetpack
+```bash
+# you can check all the option once you enter the wrong option.
+$ ./technexion_jetpack_download.sh 
+download the Technexion Jetpack -b <baseboard>
+-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX
+               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-VLS3/ VLS3-ORIN-EVK-VLI>
+
+Jetson Orin series:
+TEK6020-ORIN-NANO| TEK6040-ORIN-NANO| TEK6070-ORIN-NX| TEK6100-ORIN-NX
+
+Jetson Orin EVK series:
+TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-VLS3| VLS3-ORIN-EVK-VLI
+
+-t: tag for sync code <>
+
+--qspi-only: do not create/ flash rootfs, for qspi image only
+```
+
+## 3. Flash demo image from TEV-Jetpack
 
 ### Go to the main folder
-```coffeescript
+```Bash
 $ cd <nvidia_folder>/Linux_for_Tegra/
 ```
 
@@ -50,36 +69,28 @@ $ cd <nvidia_folder>/Linux_for_Tegra/
 3. Release '**Reset**' button.
 4. Relesee '**Recovery**' button.
 5. Check wether the device is connected.
-```coffeescript
+```Bash
 $ lsusb
 Bus 001 Device 012: ID 0955:7e19 NVIDIA Corp. APX
 ```
 
-### Flash demo image 
-Demo image is already in <nvidia_folder>/Linux_for_Tegra/bootloader/, named system.img.
+### Flash demo image from L4T
+* For Orin-Nano/ NX:
 
-* For Xavier-NX
-```coffeescript
-$ sudo ./flash.sh -r jetson-xavier-nx-devkit-emmc mmcblk0p1 
-```
+|  Product Name   | board_conf  | default storage |
+|  ----  | ----  | ---- |
+| TEK6100-ORIN-NX  | tn-tek6100-orin-nx | nvme0n1p1 |
+| TEK6070-ORIN-NX  | tn-tek6070-orin-nx | nvme0n1p1 |
+| TEK6040-ORIN-NANO  | tn-tek6040-orin-nano | nvme0n1p1 |
+| TEK6020-ORIN-NANO  | tn-tek6020-orin-nano | nvme0n1p1 |
+| VLS3-ORIN-EVK-VLS3  | tn-vls3-orin-evk-vls3 | mmcblk1p1 |
+| TEV-RPI22-TEVI  | tn-tev-rpi22-tevi | mmcblk1p1 |
+| TEV-RPI22-TEVS  | tn-tev-rpi22-tevS | mmcblk1p1 |
 
-* For Nano
-```coffeescript
-$ sudo ./flash.sh -r jetson-nano-devkit-emmc mmcblk0p1 
+```Bash
+# Please set the conf according to above table (<storage>, <board_conf>)
+$ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device <storage> -c tools/kernel_flash/flash_l4t_external.xml \
+	-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+	--showlogs --no-flash --network usb0 <board_conf> internal
 ```
 <br />
-
-## 3. Login to device CUI/ GUI(console/ display)
-After flash, you will see this on CUI:
-```
-[   31.893157] Please complete system configuration setup on desktop to proceed...
-```
-You need to **[follow the step](https://www.linuxtechi.com/ubuntu-18-04-lts-desktop-installation-guide-screenshots/)** to creat system configuration **on GUI**.
-(Need to prepare **USB keyboard/ mouse**, and **DP monitor**.)
-
-And you can login GUI/ CUI with your account.
-> **With TEK8-NX210V**
-> 
-> It will flash FPGA firmware after you set system configuration.
-> Reboot after finish, and this only do it once.
-
