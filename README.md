@@ -2,6 +2,15 @@
 
 This script contains a complete system package that enables your Jeston Jetpack to directly support TechNexion embedded vision devices.
 
+## Product page:
+
+[TEK-ORIN](https://www.technexion.com/products/embedded-computing/aivision/tek6040-orin-nano/)
+
+[Orin Nano EVK](https://www.technexion.com/products/embedded-vision/evk/vls3-orin-evk/)
+
+## Full instruction:
+[Technexion document 360](https://developer.technexion.com/docs/1)
+
 ## 1. Prepare ubuntu environment
 Download Ubuntu 20.04/ 22.04 iso file from [ubuntu web site](https://ubuntu.com/download/desktop).
 
@@ -93,4 +102,5 @@ $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device <storage> -c t
 	-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
 	--showlogs --no-flash --network usb0 <board_conf> internal
 ```
-<br />
+# Want for more guide ? 
+click here !! [Technexion document 360](https://developer.technexion.com/docs/1)
