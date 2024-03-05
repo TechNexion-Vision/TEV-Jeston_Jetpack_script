@@ -284,27 +284,6 @@ create_demo_image (){
 	sed -i '8i\ \ \ \ \ \ \ \ \ \ \ \ exclusion-info = <2>;' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
 	sed -i '8i\ \ \ \ \ \ \ \ reg@322 { /* GPIO_M_SCR_00_0 */' Linux_for_Tegra/bootloader/t186ref/BCT/tegra234-mb2-bct-scr-p3767-0000.dts
 
-	# download camera demo script
-	if [[ $SOM == "Orin" ]];then
-		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/video_orin-Banner-TEK.jpg
-		sudo mv video_orin-Banner-TEK.jpg Linux_for_Tegra/rootfs/home/ubuntu/
-		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/video_orin-Banner-TEK.jpg
-
-		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/run_aeq_EVK.sh
-		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/TechNexion_8_Cam_Demo_EVK.sh
-		sudo mv run_aeq_EVK.sh Linux_for_Tegra/rootfs/home/ubuntu/
-		sudo mv TechNexion_8_Cam_Demo_EVK.sh Linux_for_Tegra/rootfs/home/ubuntu/
-		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/run_aeq_EVK.sh
-		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/TechNexion_8_Cam_Demo_EVK.sh
-
-		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/run_aeq_TEK.sh
-		wget -c -t 5 --no-check-certificate https://ftp.technexion.com/.image/TechNexion_8_Cam_Demo_TEK.sh
-		sudo mv run_aeq_TEK.sh Linux_for_Tegra/rootfs/home/ubuntu/
-		sudo mv TechNexion_8_Cam_Demo_TEK.sh Linux_for_Tegra/rootfs/home/ubuntu/
-		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/run_aeq_TEK.sh
-		sudo chmod 777 Linux_for_Tegra/rootfs/home/ubuntu/TechNexion_8_Cam_Demo_TEK.sh
-	fi
-
 	# download disk image creator script
 	if [[ $USING_SSH -eq 0 ]];then
 		git clone https://github.com/TechNexion-Vision/TEV-Jetson_disk_image_creator.git TEV-Jetson_disk_image_creator
