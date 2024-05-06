@@ -9,7 +9,7 @@ This script contains a complete system package that enables your Jeston Jetpack 
 [Orin Nano EVK](https://www.technexion.com/products/embedded-vision/evk/vls3-orin-evk/)
 
 ## Full instruction:
-[Technexion document 360](https://developer.technexion.com/docs/1)
+[Technexion document 360](https://developer.technexion.com/docs/host-environment-setting-1)
 
 ## 1. Prepare ubuntu environment
 Download Ubuntu 20.04/ 22.04 iso file from [ubuntu web site](https://ubuntu.com/download/desktop).
@@ -103,4 +103,4 @@ $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device <storage> -c t
 	--showlogs --no-flash --network usb0 <board_conf> internal
 ```
 # Want for more guide ? 
-click here !! [Technexion document 360](https://developer.technexion.com/docs/1)
+click here !! [Technexion document 360](https://developer.technexion.com/docs/host-environment-setting-1)
