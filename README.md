@@ -100,7 +100,7 @@ Bus 001 Device 012: ID 0955:7e19 NVIDIA Corp. APX
 # Please set the conf according to above table (<storage>, <board_conf>)
 $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device <storage> -c tools/kernel_flash/flash_l4t_external.xml \
 	-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
-	--showlogs --no-flash --network usb0 <board_conf> internal
+	--showlogs --flash-only --network usb0 <board_conf> internal
 ```
 # Want for more guide ? 
 click here !! [Technexion document 360](https://developer.technexion.com/docs/host-environment-setting-1)
