@@ -3,11 +3,10 @@
 TIME=$(date +'%Y%m%d')
 CUR_DIR="$(pwd)/"
 NV_TAG="jetson_35.3.1"
-TEK_TAG="${TAG}_TEK-ORIN-a1"
 BRANCH="tn_l4t-r35.3.ga_kernel-5.10"
 TEK_BRANCH="${BRANCH}_TEK-ORIN-a1"
 
-VALID_TAG=("")
+VALID_TAG=("r35.3.ga")
 
 USING_TAG=0
 
@@ -328,7 +327,8 @@ usage() {
 	echo "Jetson Orin EVK series:" 1>&2
 	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-VLS3| VLS3-ORIN-EVK-VLI" 1>&2
 	echo "" 1>&2
-	echo "-t: tag for sync code <>" 1>&2
+	echo "-t: tag for sync code:" 1>&2
+	echo "r35.3.ga" 1>&2
 	echo "" 1>&2
 	echo "--qspi-only: do not create/ flash rootfs, for qspi image only" 1>&2
 	exit 1
@@ -468,6 +468,8 @@ if [ -z "${t}" ]; then
 	echo -e "### lack of tag, using lastest code.\n\n"
 else
 	echo "valid input: t=$t"
+	TAG=$t
+	TEK_TAG="${TAG}_TEK-ORIN-a1"
 fi
 
 
