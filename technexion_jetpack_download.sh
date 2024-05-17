@@ -55,6 +55,7 @@ sync_tn_source_code() {
 	fi
 	git fetch tn-github ${BRANCH}
 	git checkout -b ${BRANCH} tn-github/${BRANCH}
+	git fetch tn-github --tags
 	if [[ $USING_TAG -eq 1 ]];then
 		git reset --hard $TAG
 	fi
@@ -71,6 +72,7 @@ sync_tn_source_code() {
 	fi
 	git fetch tn-github ${BRANCH}
 	git checkout -b ${BRANCH} tn-github/${BRANCH}
+	git fetch tn-github --tags
 	if [[ $USING_TAG -eq 1 ]];then
 		git reset --hard $TAG
 	fi
