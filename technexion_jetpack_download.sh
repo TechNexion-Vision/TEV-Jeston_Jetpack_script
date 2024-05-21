@@ -215,37 +215,49 @@ create_demo_image (){
 	sudo cp -rp VizionViewer/usr/ Linux_for_Tegra/rootfs/
 	rm -rf VizionViewer/
 
-	# download the lastest VizionViewer
-	VV_URL='https://ftp.technexion.com/vizionviewer/linux_nvidia_jetson/focal/'
-	VV_LIST=()
-	VV_LIST_VER=()
-	MAX_VER=0
-	VV=$(curl ${VV_URL}|grep -Poi "href=\"vizionviewer_.*_focal.tar.xz\"" | cut -d '"' -f 2)
-	for i in ${VV[@]}
-	do
-		if [[ $i == vizionviewer* ]];then
-			VV_LIST+=(${i})
-		fi
-	done
+	# dwonload VizionViewer
+	if [[ $USING_TAG -eq 1 ]];then
+		case $TAG in
+			r35.3.ga)
+				VV_URL='https://ftp.technexion.com/vizionviewer/linux_nvidia_jetson/focal/vizionviewer_24.05.1_jetson_focal.tar.xz'
+				;;
+			*)
+				# Let VV_URL empty, cause error when try to download
+				;;
+		esac
+	else
+		# download the lastest VizionViewer
+		VV_URL='https://ftp.technexion.com/vizionviewer/linux_nvidia_jetson/focal/'
+		VV_LIST=()
+		VV_LIST_VER=()
+		MAX_VER=0
+		VV=$(curl ${VV_URL}|grep -Poi "href=\"vizionviewer_.*_focal.tar.xz\"" | cut -d '"' -f 2)
+		for i in ${VV[@]}
+		do
+			if [[ $i == vizionviewer* ]];then
+				VV_LIST+=(${i})
+			fi
+		done
 
-	for i in ${VV_LIST[@]}
-	do
-		VV_LIST_VER+=($(echo $i|grep -Poi "_[\d|\.]*"| sed 's|_||g'| sed 's|\.||g'))
-	done
+		for i in ${VV_LIST[@]}
+		do
+			VV_LIST_VER+=($(echo $i|grep -Poi "_[\d|\.]*"| sed 's|_||g'| sed 's|\.||g'))
+		done
 
-	for i in ${VV_LIST_VER[@]}
-	do
-		if [[ ${i} -gt ${MAX_VER} ]];then 
-			MAX_VER=${i}
-		fi
-	done
+		for i in ${VV_LIST_VER[@]}
+		do
+			if [[ ${i} -gt ${MAX_VER} ]];then
+				MAX_VER=${i}
+			fi
+		done
 
-	for ((i=0;i<${#VV_LIST_VER[@]};i++))
-	do
-		if [[ ${VV_LIST_VER[$i]} == $MAX_VER ]];then
-			VV_URL+=${VV_LIST[$i]}
-		fi
-	done
+		for ((i=0;i<${#VV_LIST_VER[@]};i++))
+		do
+			if [[ ${VV_LIST_VER[$i]} == $MAX_VER ]];then
+				VV_URL+=${VV_LIST[$i]}
+			fi
+		done
+	fi
 	wget -c -t --no-check-certificate ${VV_URL}
 	sudo mv vizionviewer*.tar.xz Linux_for_Tegra/rootfs/usr/share/vizionviewer/
 
