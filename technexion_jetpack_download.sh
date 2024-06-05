@@ -262,7 +262,7 @@ create_demo_image (){
 	sudo mv vizionviewer*.tar.xz Linux_for_Tegra/rootfs/usr/share/vizionviewer/
 
 	# copy QCA9377 firmware from github
-	git clone https://github.com/kvalo/ath10k-firmware.git QCA9377_WIFI
+	git clone https://git.codelinaro.org/clo/ath-firmware/ath10k-firmware.git QCA9377_WIFI
 	git clone https://oauth2:SbtQ_mC4fvJRA88_9jB7@gitlab.com/technexion-imx/qca_firmware.git QCA9377_BT
 	sudo cp -rp QCA9377_WIFI/QCA9377/hw1.0/board-2.bin Linux_for_Tegra/rootfs/lib/firmware/ath10k/QCA9377/hw1.0
 	sudo cp -rp QCA9377_WIFI/QCA9377/hw1.0/board.bin Linux_for_Tegra/rootfs/lib/firmware/ath10k/QCA9377/hw1.0
