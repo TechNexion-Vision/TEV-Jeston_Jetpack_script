@@ -3,7 +3,7 @@
 TIME=$(date +'%Y%m%d')
 CUR_DIR="$(pwd)/"
 NV_TAG="jetson_35.3.1"
-BRANCH="tn_l4t-r35.3.ga_kernel-5.10"
+BRANCH="tn_l4t-r35.3.1.ga_kernel-5.10"
 TEK_BRANCH="${BRANCH}_TEK-ORIN-a1"
 
 VALID_TAG=("r35.3.ga")
