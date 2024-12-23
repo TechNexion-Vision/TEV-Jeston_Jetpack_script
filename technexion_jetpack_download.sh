@@ -319,7 +319,7 @@ create_demo_image (){
 	cd Linux_for_Tegra/
 	if [[ ${qspi_only} -eq 1 ]];then
 		sudo ./tools/kernel_flash/l4t_initrd_flash.sh \
-			-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml" \
+			-p "-c bootloader/t186ref/cfg/flash_t234_qspi.xml --no-systemimg" \
 			--showlogs --no-flash --network usb0 ${board_conf} internal
 	else
 		sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device ${rootfs_dev_p1[0]} -c tools/kernel_flash/flash_l4t_external.xml \
