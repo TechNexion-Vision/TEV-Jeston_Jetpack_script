@@ -341,11 +341,11 @@ create_demo_image (){
 
 usage() {
 	echo -e "$0 \ndownload the Technexion Jetpack -b <baseboard>" 1>&2
-	echo "-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX" 1>&2
+	echo "-b: baseboard <TEK6020-ORIN-NANO/ TEK6040-ORIN-NANO/ TEK6070-ORIN-NX/ TEK6100-ORIN-NX/ TEK6100-ORIN-NX-HYNIX" 1>&2
 	echo "               TEV-RPI22-TEVI/ TEV-RPI22-TEVS/ VLS3-ORIN-EVK-VLS3>" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin series:" 1>&2
-	echo "TEK6020-ORIN-NANO| TEK6040-ORIN-NANO| TEK6070-ORIN-NX| TEK6100-ORIN-NX" 1>&2
+	echo "TEK6020-ORIN-NANO| TEK6040-ORIN-NANO| TEK6070-ORIN-NX| TEK6100-ORIN-NX| TEK6100-ORIN-NX-HYNIX" 1>&2
 	echo "" 1>&2
 	echo "Jetson Orin EVK series:" 1>&2
 	echo "TEV-RPI22-TEVI| TEV-RPI22-TEVS| VLS3-ORIN-EVK-VLS3" 1>&2
@@ -376,6 +376,11 @@ setup_env_vars () {
 			;;
 		TEK6100-ORIN-NX)
 			board_conf="tn-tek6100-orin-nx"
+			rootfs_dev=("NVMe" "USB")
+			rootfs_dev_p1=("nvme0n1p1" "sda1")
+			;;
+		TEK6100-ORIN-NX-HYNIX)
+			board_conf="tn-tek6100-orin-nx-hynix"
 			rootfs_dev=("NVMe" "USB")
 			rootfs_dev_p1=("nvme0n1p1" "sda1")
 			;;
