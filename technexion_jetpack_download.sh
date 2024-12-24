@@ -15,6 +15,8 @@ get_nvidia_jetpack() {
 	JETPACK="https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/release/jetson_linux_r35.3.1_aarch64.tbz2/"
 	ROOTFS="https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/release/tegra_linux_sample-root-filesystem_r35.3.1_aarch64.tbz2/"
 	PUBLIC="https://developer.nvidia.com/downloads/embedded/l4t/r35_release_v3.1/sources/public_sources.tbz2/"
+	HYNIX_16G_DRAM_PATCH_1="https://ftp.technexion.com/development_resources/NVIDIA/.TEK6100-ORIN-NX-hynix/overlay_35.3.1_Dave_20230704.tbz2"
+	HYNIX_16G_DRAM_PATCH_2="https://ftp.technexion.com/development_resources/NVIDIA/.TEK6100-ORIN-NX-hynix/t234-dram-package-35.3.1.tbz2"
 
 	wget $JETPACK -q --tries=10 -O jetpack.tbz2
 	wget $ROOTFS -q --tries=10 -O rootfs.tbz2
@@ -24,7 +26,14 @@ get_nvidia_jetpack() {
 	tar -jxf public.tbz2
 	sudo tar -jxf rootfs.tbz2 -C Linux_for_Tegra/rootfs
 
-	rm -rf jetpack.tbz2 rootfs.tbz2 public.tbz2
+	# overlay patch from NVIDIA, cover ORIN-NX 16G with hynix dram
+	wget -q --no-check-certificate $HYNIX_16G_DRAM_PATCH_1 -O dram-patch-1.tbz2
+	wget -q --no-check-certificate $HYNIX_16G_DRAM_PATCH_2 -O dram-patch-2.tbz2
+	tar -jxf dram-patch-1.tbz2
+	tar -jxf dram-patch-2.tbz2
+
+	rm -rf jetpack.tbz2 rootfs.tbz2 public.tbz2 dram-patch-1.tbz2 dram-patch-2.tbz2
+
 	cd ${CUR_DIR}
 	echo -ne "done\n"
 }
